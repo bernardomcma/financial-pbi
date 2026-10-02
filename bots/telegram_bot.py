@@ -60,6 +60,7 @@ from database import (
 )
 from services.google_sheets import atualizar_registro_sheets, conectar_google_sheets
 from ui.constants import (
+    CARTOES,
     CLASSES_INVESTIMENTO,
     CLASSE_INVESTIMENTO_PADRAO,
     PERIODICIDADES,
@@ -468,10 +469,13 @@ async def on_webapp_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 async def _aplicar_fatura(update, context, cartao: str, nova_data: str) -> None:
     payload = {"ultimo_ciclo_pago": nova_data}
-    atualizar_registro_db("FaturasPagas", "cartao", cartao, payload)
-    if spreadsheet is not None:
-        atualizar_registro_sheets(spreadsheet, "FaturasPagas", "cartao", cartao, payload)
-    await responder(update, context, f"✅ Fatura <b>{html.escape(cartao)}</b> atualizada para: <b>{html.escape(nova_data)}</b>")
+    cartoes = CARTOES if str(cartao).strip().upper() == "ALL" else [cartao]
+    for cartao_atual in cartoes:
+        atualizar_registro_db("FaturasPagas", "cartao", cartao_atual, payload)
+        if spreadsheet is not None:
+            atualizar_registro_sheets(spreadsheet, "FaturasPagas", "cartao", cartao_atual, payload)
+    destino = "todos os cartões" if str(cartao).strip().upper() == "ALL" else html.escape(str(cartao))
+    await responder(update, context, f"✅ Fatura de <b>{destino}</b> atualizada para: <b>{html.escape(nova_data)}</b>")
 
 
 async def _aplicar_pix_editar(update, context, id_compra, qtd) -> None:
@@ -683,7 +687,7 @@ async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "🔁 <code>/pix [total] [entrada] [pagas] [categoria] [descrição]</code>\n"
         "📈 <code>/invest [classe] [ticker] [op] [valor] [qtd]</code>\n\n"
         "🔄 <b>Edições:</b>\n"
-        "📅 <code>/fatura_update [cartao] [nova_data]</code>\n"
+        "📅 <code>/fatura_update [cartao|ALL] [nova_data]</code>\n"
         "🔢 <code>/pix_update [id_compra] [qtd_pagas]</code>\n"
         "🔔 <code>/ass_toggle [nome_assinatura]</code>\n\n"
         "⭐ <b>Desejos:</b>\n"

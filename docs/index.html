@@ -747,7 +747,7 @@ function telaAssinatura(){
 
 function telaFatura(){
   renderScreen("form", "Atualizar Fatura", "Último ciclo pago de um cartão",
-    field("Cartão", `<select id="cartao">${opts(CARTOES,"Inter")}</select>`) +
+    field("Cartão", `<select id="cartao">${opts(["ALL", ...CARTOES],"Inter")}</select>`) +
     field("Novo último ciclo pago", `<input id="data" placeholder="Ex: 01/07/2026">`) +
     `<div class="hint-line">Data no formato dia/mês/ano.</div>`, "manutencao");
   setSubmit("💾 Atualizar fatura", () => {

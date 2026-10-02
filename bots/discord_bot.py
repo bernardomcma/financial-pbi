@@ -672,11 +672,14 @@ async def wishlist_add_cmd(interaction, preco: str, nome: str, cat: str, priorid
 
 async def _confirmar_fatura(interaction: discord.Interaction, cartao: str, nova_data: str):
     payload = {"ultimo_ciclo_pago": nova_data}
-    atualizar_registro_db("FaturasPagas", "cartao", cartao, payload)
-    if spreadsheet is not None:
-        atualizar_registro_sheets(spreadsheet, "FaturasPagas", "cartao", cartao, payload)
+    cartoes = CARTOES if cartao.strip().upper() == "ALL" else [cartao]
+    for cartao_atual in cartoes:
+        atualizar_registro_db("FaturasPagas", "cartao", cartao_atual, payload)
+        if spreadsheet is not None:
+            atualizar_registro_sheets(spreadsheet, "FaturasPagas", "cartao", cartao_atual, payload)
+    destino = "todos os cartões" if cartao.strip().upper() == "ALL" else f"o cartão **{cartao}**"
     await interaction.followup.send(
-        f"✅ Fatura **{cartao}** atualizada para: **{nova_data}**", ephemeral=True
+        f"✅ Fatura de {destino} atualizada para: **{nova_data}**", ephemeral=True
     )
 
 

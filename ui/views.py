@@ -271,7 +271,9 @@ class AssinaturaPeriodicidadeView(AuthorizedView):
 
 class _FaturaSelect(discord.ui.Select):
     def __init__(self, on_confirm: FaturaConfirm) -> None:
-        options = [discord.SelectOption(label=c, emoji="💳") for c in CARTOES]
+        options = [
+            discord.SelectOption(label="ALL - Todos os cartões", value="ALL", emoji="💳")
+        ] + [discord.SelectOption(label=c, value=c, emoji="💳") for c in CARTOES]
         super().__init__(placeholder="Escolha o cartão...", min_values=1, max_values=1, options=options)
         self._on_confirm = on_confirm
 
