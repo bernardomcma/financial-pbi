@@ -1,6 +1,26 @@
 # financial-pbi
 
-Pipeline de finanças pessoais com integração ao Google Sheets para:
+> **Personal Finance ETL Pipeline & BI System** — Python, PostgreSQL, Google Sheets, Telegram/Discord bots, Ollama AI insights, and Power BI (47 DAX measures).
+
+## English Overview
+
+`financial-pbi` is an end-to-end personal finance data pipeline and decision-support system built with **Python**, **PostgreSQL**, **Google Sheets**, **Telegram/Discord bots**, and **Power BI**.
+
+### Key Capabilities
+
+- **Automated ETL & Normalization:** Consolidates cash flow across credit card bills, Pix installments, subscriptions, debit expenses, and income from Google Sheets into PostgreSQL (`main.py`, `bootstrap_pg.py`).
+- **Multi-Asset Portfolio Valuation:** Computes net-worth snapshots for **CDI** (Bacen historical series), **Bitcoin** (satoshi conversion), **Cryptocurrencies** (CoinGecko), and **B3 ETFs & Stocks** (Yahoo Finance).
+- **Interactive Bots & Mini App:** Telegram and Discord bots (`run_bots.py`, `bots/`, `ui/`) to log transactions, manage credit card bills, and trigger pipeline runs.
+- **Local AI Financial Insights:** Generates automated financial summaries and smart transaction parsing via **Ollama** (`ai_financial_insights.py`).
+- **Power BI Integration:** SQL layer (`pbi-postgres-sql/`) feeding a Power BI semantic model with 47 DAX measures.
+
+> Below is the full technical documentation in Portuguese (`PT-BR`).
+
+---
+
+## Documentação (PT-BR)
+
+Pipeline de finanças pessoais com integração ao Google Sheets e PostgreSQL para:
 
 - consolidar fluxo de caixa,
 - processar receitas e despesas parceladas,
@@ -31,14 +51,25 @@ Pipeline de finanças pessoais com integração ao Google Sheets para:
 
 ```text
 financial-pbi/
-├── main.py
-├── config.py
-├── services/      # Integrações externas (Google Sheets)
-├── processors/    # Regras de negócio
-├── models/        # Dataclasses e contratos de dados
-├── utils/         # Logging, retry, parsing e helpers
-├── tests/         # Testes automatizados
-└── modules/       # Compatibilidade com imports legados
+├── bots/                     # Bots do Telegram e Discord
+├── database/                 # Conexão e persistência em PostgreSQL
+├── deploy/                   # Scripts e configurações de deploy
+├── docs/                     # Documentação complementar
+├── migrations/               # Migrações de schema PostgreSQL
+├── models/                   # Dataclasses e contratos de dados
+├── pbi-postgres-sql/         # Queries/views SQL para Power BI + PostgreSQL
+├── processors/               # Regras de negócio (fluxo de caixa e patrimônio)
+├── services/                 # Integrações externas (Google Sheets, cotações, IA)
+├── tests/                    # Testes automatizados (pytest)
+├── ui/                       # Interface web / Telegram Mini App
+├── utils/                    # Logging, retry, parsing e helpers
+├── ai_financial_insights.py  # Geração de insights financeiros com Ollama
+├── bootstrap_pg.py           # Inicialização e carga do PostgreSQL
+├── main.py                   # Entrypoint principal do pipeline ETL
+├── run_bots.py               # Launcher unificado dos bots (Telegram + Discord)
+├── TELEGRAMBOT_SETUP.md      # Configuração do bot e Mini App do Telegram
+├── requirements.txt          # Dependências do projeto
+└── requirements-lock.txt     # Lockfile de dependências
 ```
 
 ## Requisitos
